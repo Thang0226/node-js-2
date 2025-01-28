@@ -18,6 +18,10 @@ ul {
   color: #222;
 }
 
+table a {
+  text-decoration: underline;
+}
+
 /* nav & footer styles */
 nav {
   display: flex;
