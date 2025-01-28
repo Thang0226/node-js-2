@@ -1,6 +1,7 @@
 import express from "express";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import morgan from "morgan";
 
 const __filename = fileURLToPath(import.meta.url); // get file path
 const __dirname = dirname(__filename); // get folder path from file path, because sendFile() use absolute path
@@ -28,6 +29,20 @@ const blogs = [
     body: "Lorem ipsum dolor sit amet consectetur",
   },
 ];
+
+// pre-handle requests
+// app.use((req, res, next) => {
+//   console.log();
+//   console.log("New request made:");
+//   console.log("Host: ", req.hostname);
+//   console.log("Path: ", req.url);
+//   console.log("Method: ", req.method);
+//   next(); // move to next middleware
+// });
+
+// Middleware & Static files
+app.use(morgan("dev")); // log requests
+app.use(express.static("public")); // serve static files
 
 // Listen to requests
 app.get("/", (req, res) => {
