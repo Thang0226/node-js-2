@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <div class="site-content">
+      <h1>Homepage</h1>
+      <h2>Hello World! Welcome to my app!</h2>
+    </div>
+
+    <%- include('./partials/nav.ejs') %>
+
+    <div class="blogs content">
+      <h2>All Blogs</h2>
+      <% if (blogs.length > 0) { %>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Snippet</th>
+            <th>Body</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% blogs.map(blog => { %>
+          <tr>
+            <td><%= blog.title %></td>
+            <td><%= blog.snippet %></td>
+            <td><%= blog.body %></td>
+            <td>
+              <a href="/blogs/<%= blog.id %>">View</a>
+              <a href="/blogs/<%= blog.id %>/edit">Edit</a>
+              <a href="/blogs/<%= blog.id %>/delete">Delete</a>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% }%>
+    </div>
+
+    <%- include('./partials/footer.ejs') %>
+  </body>
+</html>
