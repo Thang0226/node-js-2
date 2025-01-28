@@ -56,6 +56,7 @@ mongoose
 // Middleware & Static files
 app.use(morgan("dev")); // log requests
 app.use(express.static("public")); // serve static files
+app.use(express.urlencoded({ extended: true })); // enable parsing form data
 
 // Listen to requests
 app.get("/", (req, res) => {
@@ -67,40 +68,54 @@ app.get("/", (req, res) => {
     .catch((err) => console.log(err));
 });
 
+// Retrieve all blogs
 app.get("/blogs", (req, res) => {
   res.setHeader("Cache-Control", "no-cache");
   res.redirect("/");
 });
 
-app.get("/blogs/id", (req, res) => {
-  // const id = req.params.id;
-  Blog.findById("67988ef19256e4f9ae6af8a0")
+// Retrieve single blog
+app.get("/blogs/:id", (req, res) => {
+  const id = req.params.id;
+  Blog.findById(id)
     .then((result) => {
-      res.render("index", { blogs: result });
+      res.render("details", { blog: result });
+    })
+    .catch((err) => console.log(err));
+});
+
+// Create new blog
+app.get("/blogs/create", (req, res) => {
+  res.render("create");
+});
+
+app.post("/blogs", (req, res) => {
+  let { title, snippet, body } = req.body;
+  const blog = new Blog({
+    title,
+    snippet,
+    body,
+  });
+  blog
+    .save()
+    .then((result) => {
+      res.redirect("/blogs");
+    })
+    .catch((err) => console.log(err));
+});
+
+// Delete a blog
+app.get("/blogs/:id/delete", (req, res) => {
+  const id = req.params.id;
+  Blog.findByIdAndDelete(id)
+    .then((result) => {
+      res.redirect("/blogs");
     })
     .catch((err) => console.log(err));
 });
 
 app.get("/about", (req, res) => {
   res.render("about");
-});
-
-app.get("/blogs/create", (req, res) => {
-  res.render("create");
-});
-
-app.post("/blogs", (req, res) => {
-  const blog = new Blog({
-    title: "abcwerwe123312",
-    snippet: "xyz123",
-    body: "123sjd;flkjs;dfklsjdfadflkjfskdf.",
-  });
-  blog
-    .save()
-    .then((result) => {
-      res.redirect("/");
-    })
-    .catch((err) => console.log(err));
 });
 
 // Redirects
